@@ -8,17 +8,37 @@ class Detail extends React.Component {
     this.state = {
       gitInfo: {},
       noInfoFound: false,
+      repos:{}
     }
   }
 
   
   componentWillMount() {
     this.setState({gitInfo:this.props.content})
-    console.log('tinga',this.props.content)
-  }
-
+    // console.log('tinga',this.props.content)
+    let repoUrl = 'https://api.github.com/users/'+this.props.userName+'/repos';
+    let options = { method: 'GET',
+                    mode: 'cors',
+                    cache: 'default' };
+                    fetch(repoUrl)
+                    .then(response=>{
+                      console.log(response);
+                      return response.json();
+                      })
+                      .then(data=>{
+                        // console.log('piku',data);
+                        this.setState({
+                          repos:data,
+                        })
+                      })
+                      .catch(error=>{
+                        console.log(error);
+                      })
+                    }
+                    
   formatDate(date)
   {
+                      console.log('piku',this.state.repos);
     var packageDate = date;
     var str = packageDate.split(" ");
     var convert = (new Date(str[0])).toGMTString();
@@ -30,6 +50,7 @@ class Detail extends React.Component {
 
   render(){
     let gitInfo = this.props.content
+    let repoInfo = this.state.repos
     return(
       <div>
         <div className="row">
@@ -86,6 +107,25 @@ class Detail extends React.Component {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-sm-6">
+            <h4>Repositories</h4>
+            <table className="table">
+              <thead className="text-right">
+                <tr className="text-right">
+                  <th>Item Name</th>
+                  <th>invoiced</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>asd</td>
+                  <td>sd</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

@@ -72,7 +72,7 @@ handleSubmit( event ) {
 										console.log(error);
 									})
 									// event.preventDefault()
-								}
+}
 	handleChange( event ) {
 		this.setState({ [event.target.name]: event.target.value })
     // console.log(event.target.value)
@@ -133,7 +133,7 @@ design(){
 	        	</div>
 	        	<div className="col-md-3"></div>
         	</div><br/>
-					{(this.state.info.message == "Not Found" || Object.keys(this.state.info).length === 0) ? <div className="display">{this.design()}</div> : <Detail content={this.state.info}/>}
+					{(this.state.info.message == "Not Found" || Object.keys(this.state.info).length === 0) ? <div className="display">{this.design()}</div> : <Detail content={this.state.info} userName={this.state.userName} />}
 			</div>
       </div>
     )
