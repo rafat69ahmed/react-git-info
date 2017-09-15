@@ -1,0 +1,46 @@
+html,body{ 
+    height:100%;
+    padding-left: 0 !important;
+    padding-right:0 !important;
+    /*background-color: yellow;*/
+}
+
+.top{
+    background-color: yellow;
+    height: auto;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 5%;
+    padding: 10px;
+    box-shadow: 10px;
+
+}
+.search{
+	background-color: black;
+	color: white;
+	border-radius: 0px;
+	box-shadow: 0px;
+	border-color: 0px;
+}.search:hover{
+	background-color:black;
+	color: white;
+	border-radius: 0px;
+	box-shadow: 0px;
+	border-color: 0px;
+}
+.searchInput{
+	border-radius: 0px; 
+	box-shadow: 0px;
+}
+.leaf{
+	background-color: black;
+	color: white;
+	margin-left: 4%;
+	margin-right: 4%;
+	padding-bottom: 3%;
+    padding-top: 3%;
+    padding-left: 5%;
+    padding-right: 5%;
+    text-align: center;
+    border-radius: 161px  0px 161px 0px;
+}
