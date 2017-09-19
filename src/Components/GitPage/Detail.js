@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem, Panel,FormGroup, FormControl,InputGroup, Button, Image } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, NavDropdown, MenuItem, Panel,FormGroup, FormControl,InputGroup, Button, Image, Badge } from 'react-bootstrap';
 
 class Detail extends React.Component {
 
@@ -8,37 +8,73 @@ class Detail extends React.Component {
     this.state = {
       gitInfo: {},
       noInfoFound: false,
+      loadState: true,
       repos:{}
     }
+    this.loadingChange           = this.loadingChange.bind( this )
+    // this.repoLanguages           = this.repoLanguages.bind( this )
   }
 
-  
-  componentWillMount() {
-    this.setState({gitInfo:this.props.content})
-    // console.log('tinga',this.props.content)
-    let repoUrl = 'https://api.github.com/users/'+this.props.userName+'/repos';
+  componentWillReceiveProps(newProps){
+    let repoUrl = 'https://api.github.com/users/'+newProps.userName+'/repos';
     let options = { method: 'GET',
-                    mode: 'cors',
+    mode: 'cors',
                     cache: 'default' };
                     fetch(repoUrl)
                     .then(response=>{
                       console.log(response);
                       return response.json();
+                    })
+                    .then(data=>{
+                      // console.log('piku',data);
+                      this.setState({
+                        repos:data,
+                        gitInfo:newProps.content
+                      },() => {
+                        this.loadingChange()
                       })
-                      .then(data=>{
-                        // console.log('piku',data);
-                        this.setState({
-                          repos:data,
-                        })
-                      })
-                      .catch(error=>{
-                        console.log(error);
-                      })
-                    }
+                      // console.log('tinga',this.state.repos)
+                    })
+                    .catch(error=>{
+                      console.log(error);
+                    })
+    // this.setState({gitInfo:newProps.content},() => {
+    //   this.loadingChange()
+    // })
+    // console.log('ok google',newProps.content)
+  }
+  loadingChange(){
+    
+    this.setState({loadState:false})
+    console.log('tinga',this.state.gitInfo)
+    // console.log('zinga',this.state.repos)
+  }
+  
+  componentWillMount() {
+    // let repoUrl = 'https://api.github.com/users/'+this.props.userName+'/repos';
+    // let options = { method: 'GET',
+    // mode: 'cors',
+    //                 cache: 'default' };
+    //                 fetch(repoUrl)
+    //                 .then(response=>{
+    //                   console.log(response);
+    //                   return response.json();
+    //                 })
+    //                 .then(data=>{
+    //                   // console.log('piku',data);
+    //                   this.setState({
+    //                     repos:data,
+    //                   })
+    //                   // console.log('tinga',this.state.repos)
+    //                 })
+    //                 .catch(error=>{
+    //                   console.log(error);
+    //                 })
+                  }
                     
   formatDate(date)
   {
-                      console.log('piku',this.state.repos);
+                      // console.log('piku',this.state.repos);
     var packageDate = date;
     var str = packageDate.split(" ");
     var convert = (new Date(str[0])).toGMTString();
@@ -46,11 +82,39 @@ class Detail extends React.Component {
     var date = str2[1].toString()+' '+str2[2].toString()+' '+str2[3].toString();
     return date;
   }
+  // repoLanguages(value)
+  // {
+  //     // console.log('language',value);
+  //     let repoUrl = value;
+  //     let lng
+  //     let options = { method: 'GET',
+  //                     mode: 'cors',
+  //                     cache: 'default' };
+  //                     fetch(repoUrl)
+  //                     .then(response=>{
+  //                       console.log(response);
+  //                       return response.json();
+  //                     })
+  //                     .then(data=>{
+  //                       console.log('piku',data);
+  //                       lng =data
+  //                       // this.setState({
+  //                         //   repos:data,
+  //                         // })
+  //                         // console.log('tinga',this.state.repos)
+  //                       })
+  //                       .catch(error=>{
+  //                         console.log(error);
+  //                       })
+  //                       return lng
+  // }
   
-
-  render(){
+  detailComponent()
+  {
     let gitInfo = this.props.content
     let repoInfo = this.state.repos
+    console.log('zinga',repoInfo)
+    
     return(
       <div>
         <div className="row">
@@ -63,7 +127,7 @@ class Detail extends React.Component {
             <div className="media">
               <div className="media-body">
                 <div>
-                  <h4>Profile info</h4>
+                  <h3>Profile info</h3>
                 </div>
                 <div className="media row_lable">
                   <div className="media-left">
@@ -109,27 +173,45 @@ class Detail extends React.Component {
             </div>
           </div>
         </div>
+        <br/>
         <div className="row">
-          <div className="col-sm-6">
-            <h4>Repositories</h4>
+          <div className="col-sm-12">
+            <h1 className="text-center">Repositories</h1>
             <table className="table">
               <thead className="text-right">
                 <tr className="text-right">
-                  <th>Item Name</th>
-                  <th>invoiced</th>
+                  <th>Name <i className="fa fa-briefcase" aria-hidden="true"></i></th>
+                  <th>Languages <i className="fa fa-language" aria-hidden="true"></i></th>
+                  <th>Forks <i className="fa fa-code-fork" aria-hidden="true"></i></th>
+                  <th>Starts <i className="fa fa-star" aria-hidden="true"></i></th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>asd</td>
-                  <td>sd</td>
+              {
+                repoInfo.map((repo,index) =>
+                <tr key={index}>
+                <td><a href={repo.html_url} target="_blank">{repo.name}</a></td>
+                <td>{repo.language == null ? <Badge className="lang">n/a</Badge> : <Badge className="lang">{repo.language}</Badge>}</td>
+                <td>{repo.forks}</td>
+                <td>{repo.stargazers_count}</td>
                 </tr>
+                )
+              }
               </tbody>
             </table>
           </div>
         </div>
       </div>
-    )
+    ) 
+  }
+  render(){
+    
+    if(this.state.loadState == true) {
+      return (<div>loading...</div>)
+    } else {
+        return (this.detailComponent())
+    }
+    
   }
 }
 export default Detail;

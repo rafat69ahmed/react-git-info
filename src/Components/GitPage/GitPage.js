@@ -45,7 +45,7 @@ class GitPage extends React.Component {
 
 handleSubmit( event ) {
     	event.preventDefault()
-			console.log('hello',this.state.userName);
+			// console.log('hello',this.state.userName);
 			let url = 'https://api.github.com/users/'+this.state.userName;
 			let options = { method: 'GET',
 			
@@ -53,7 +53,7 @@ handleSubmit( event ) {
 	               cache: 'default' };
 								 fetch(url)
 								 .then(response=>{
-									 console.log(response);
+									//  console.log(response);
 									 return response.json();
 									})
 									.then(data=>{
@@ -66,7 +66,7 @@ handleSubmit( event ) {
 												leafDesign:false
 											})
 										}
-										console.log('bello',this.state.info)
+										// console.log('bello',this.state.info)
 									})
 									.catch(error=>{
 										console.log(error);

@@ -1,7 +1,8 @@
 html,body{ 
     height:100%;
     padding-left: 0 !important;
-    padding-right:0 !important;
+	padding-right:0 !important;
+	color:black;
     /*background-color: yellow;*/
 }
 
@@ -13,7 +14,15 @@ html,body{
     margin-top: 5%;
     padding: 10px;
     box-shadow: 10px;
-
+}
+.lang{
+    background-color: black;
+}
+a{
+	color:black
+}
+a:hover{
+	color:black
 }
 .search{
 	background-color: black;
