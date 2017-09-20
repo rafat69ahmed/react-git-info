@@ -16,7 +16,7 @@ class Routes extends React.Component {
       <div className="routes-component">
         <Router history={hashHistory}>
           <Route path='/' component={App}>
-            <IndexRoute component={Home}/>
+            <IndexRoute component={GitPage}/>
             <Route path='test' component={test} />
             <Route path='layout' component={Layout} />
             <Route path='git' component={GitPage} />
