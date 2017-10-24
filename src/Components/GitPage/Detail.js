@@ -175,7 +175,7 @@ class Detail extends React.Component {
         </div>
         <br/>
         <div className="row">
-          <div className="col-sm-12">
+          <div className="col-sm-12 ">
             <h1 className="text-center">Repositories</h1>
             <table className="table">
               <thead className="text-right">
