@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem, Panel,FormGroup, FormControl,InputGroup, Button, Image, Badge } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, NavDropdown,Pagination, MenuItem, Panel,FormGroup, FormControl,InputGroup, Button, Image, Badge } from 'react-bootstrap';
 
 class Detail extends React.Component {
 
@@ -9,14 +9,21 @@ class Detail extends React.Component {
       gitInfo: {},
       noInfoFound: false,
       loadState: true,
-      repos:{}
+      repos:{},
+      activePage:1
     }
     this.loadingChange           = this.loadingChange.bind( this )
-    // this.repoLanguages           = this.repoLanguages.bind( this )
+    this.handleSelect           = this.handleSelect.bind( this )
+    this.test           = this.test.bind( this )
   }
-
+  handleSelect(eventKey) {
+    this.setState({
+      activePage: eventKey,
+    },()=>{this.test()});
+  }
   componentWillReceiveProps(newProps){
-    let repoUrl = 'https://api.github.com/users/'+newProps.userName+'/repos';
+    // let repoUrl = 'https://api.github.com/users/'+newProps.userName+'/repos';
+    let repoUrl = 'https://api.github.com/users/'+newProps.userName+'/repos?page='+this.state.activePage+'&per_page=30';
     let options = { method: 'GET',
     mode: 'cors',
                     cache: 'default' };
@@ -50,27 +57,31 @@ class Detail extends React.Component {
     // console.log('zinga',this.state.repos)
   }
   
-  componentWillMount() {
-    // let repoUrl = 'https://api.github.com/users/'+this.props.userName+'/repos';
-    // let options = { method: 'GET',
-    // mode: 'cors',
-    //                 cache: 'default' };
-    //                 fetch(repoUrl)
-    //                 .then(response=>{
-    //                   console.log(response);
-    //                   return response.json();
-    //                 })
-    //                 .then(data=>{
-    //                   // console.log('piku',data);
-    //                   this.setState({
-    //                     repos:data,
-    //                   })
-    //                   // console.log('tinga',this.state.repos)
-    //                 })
-    //                 .catch(error=>{
-    //                   console.log(error);
-    //                 })
-                  }
+  test()
+  {
+    let repoUrl = 'https://api.github.com/users/'+this.props.userName+'/repos?page='+this.state.activePage+'&per_page=30';
+    let options = { method: 'GET',
+    mode: 'cors',
+                    cache: 'default' };
+                    fetch(repoUrl)
+                    .then(response=>{
+                      console.log(response);
+                      return response.json();
+                    })
+                    .then(data=>{
+                      // console.log('piku',data);
+                      this.setState({
+                        repos:data,
+                        gitInfo:this.props.content
+                      },() => {
+                        this.loadingChange()
+                      })
+                      // console.log('tinga',this.state.repos)
+                    })
+                    .catch(error=>{
+                      console.log(error);
+                    })
+  }
                     
   formatDate(date)
   {
@@ -108,6 +119,25 @@ class Detail extends React.Component {
   //                       })
   //                       return lng
   // }
+
+  paginate()
+  {
+    let gitInfo = this.props.content
+    return (
+      <Pagination
+        prev
+        next
+        first
+        last
+        ellipsis
+        boundaryLinks
+        items={Math.ceil(gitInfo.public_repos/30)}
+        maxButtons={5}
+        activePage={this.state.activePage}
+        onSelect={this.handleSelect}
+      />
+    )
+  }
   
   detailComponent()
   {
@@ -199,6 +229,7 @@ class Detail extends React.Component {
               }
               </tbody>
             </table>
+            {this.paginate()}
           </div>
         </div>
       </div>
